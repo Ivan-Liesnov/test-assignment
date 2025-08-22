@@ -37,7 +37,7 @@ kubectl port-forward --namespace fleet svc/fleet-service 8080:8080
 curl 127.0.0.1:8080
 ```
 Another valid sugestion - use `mysql` client, `redis-cli` to check connection. In case of FleetDM - open forwarded URL in browser.
-Screenshot
+<img width="1512" height="835" alt="Screenshot 2025-08-21 at 20 52 09" src="https://github.com/user-attachments/assets/d87aa9da-4a30-4d65-82c4-e02bcfbb315e" />
 
 ### Additional Notes
 * Used FleetDM Helm chart version - `v6.6.12`, maybe it worth rename and restart versioning, as it is modified heavily
