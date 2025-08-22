@@ -21,6 +21,37 @@ This instructions applicable to macOS Sequoia, on other OS/versions setup wasn't
 
 ### Verification steps to confirm FleetDM, MySQL, and Redis are operational
 Since it is local install, simpliest way to check if FleetDM, MySQL and Redis are running - do port-forward of appropriative services and try to connect locally.
+But before connecting, please check that pods/services are present and running. Typical setup looks like the following:
+```bash
+$ kubectl --namespace fleet get all
+NAME                         READY   STATUS    RESTARTS        AGE
+pod/fleet-58df6dc57-27vt4    1/1     Running   2 (3m6s ago)    3m37s
+pod/fleet-58df6dc57-6nlcb    1/1     Running   3 (2m56s ago)   3m37s
+pod/fleet-mysql-0            1/1     Running   0               3m37s
+pod/fleet-redis-master-0     1/1     Running   0               3m37s
+pod/fleet-redis-replicas-0   1/1     Running   0               3m37s
+pod/fleet-redis-replicas-1   1/1     Running   0               2m59s
+pod/fleet-redis-replicas-2   1/1     Running   0               2m37s
+
+NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/fleet-mysql            ClusterIP   10.108.202.238   <none>        3306/TCP   3m37s
+service/fleet-mysql-headless   ClusterIP   None             <none>        3306/TCP   3m37s
+service/fleet-redis-headless   ClusterIP   None             <none>        6379/TCP   3m37s
+service/fleet-redis-master     ClusterIP   10.108.174.106   <none>        6379/TCP   3m37s
+service/fleet-redis-replicas   ClusterIP   10.106.203.251   <none>        6379/TCP   3m37s
+service/fleet-service          ClusterIP   10.96.140.56     <none>        8080/TCP   3m37s
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/fleet   2/2     2            2           3m37s
+
+NAME                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/fleet-58df6dc57   2         2         2       3m37s
+
+NAME                                    READY   AGE
+statefulset.apps/fleet-mysql            1/1     3m37s
+statefulset.apps/fleet-redis-master     1/1     3m37s
+statefulset.apps/fleet-redis-replicas   3/3     3m37s
+```
 * MySQL
 ```bash
 kubectl port-forward --namespace fleet svc/fleet-mysql 3306:3306
